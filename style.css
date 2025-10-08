@@ -17,16 +17,56 @@ body {
   );
   color: var(--text);
   padding: 0 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 header,
 section {
   background: var(--panel-bg);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
   border: 1px solid var(--border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0px 0px rgba(255, 255, 255, 0);
+  position: relative;
+  overflow: hidden;
+}
+
+section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  z-index: 1;
+}
+
+section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
+  z-index: 1;
 }
 
 header {
@@ -49,6 +89,71 @@ header p {
   font-family: "Roboto Mono", monospace;
   font-size: 1.1rem;
   color: var(--muted);
+}
+
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero .intro h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero .intro p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: var(--muted);
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-block;
+  padding: 15px 30px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* make the header box act like the rest of the page content */
+header .box {
+  max-width: 1200px; /* match .portfolio-grid max-width */
+  margin: 0 auto; /* center the big box horizontally */
+  padding: 0 20px;
+  display: flex;
+  justify-content: flex-start; /* left-align children (the .container) */
+  align-items: center; /* vertically center the clock inside the header */
+  gap: 16px; /* optional spacing between elements */
+}
+
+/* container/clock: no extra left margin so it hugs the left of the big box */
+header .box .container {
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
 
 section {
@@ -106,6 +211,7 @@ footer {
   margin: 60px 0 30px;
   color: var(--muted);
   font-family: "Roboto Mono", monospace;
+  margin-top: auto;
 }
 
 /* Theme variables */
@@ -115,7 +221,7 @@ html.light {
   --bg-gradient-3: #dda0dd;
   --bg-gradient-4: #ffffff;
   --text: #212529;
-  --panel-bg: rgba(255, 255, 255, 0.6);
+  --panel-bg: rgba(255, 255, 255, 0.25);
   --border: rgba(255, 255, 255, 0.2);
   --muted: #6c757d;
   --accent: #87ceeb;
@@ -127,25 +233,10 @@ html.dark {
   --bg-gradient-3: #232526;
   --bg-gradient-4: #414345;
   --text: #e9ecef;
-  --panel-bg: rgba(30, 30, 30, 0.6);
-  --border: rgba(255, 255, 255, 0.1);
+  --panel-bg: rgba(73, 72, 72, 0.25);
+  --border: rgba(255, 255, 255, 0.3);
   --muted: #adb5bd;
   --accent: #80bfff;
-}
-
-/* Respect OS dark mode by default */
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    --bg-gradient-1: #232526;
-    --bg-gradient-2: #414345;
-    --bg-gradient-3: #232526;
-    --bg-gradient-4: #414345;
-    --text: #e9ecef;
-    --panel-bg: rgba(30, 30, 30, 0.6);
-    --border: rgba(255, 255, 255, 0.1);
-    --muted: #adb5bd;
-    --accent: #80bfff;
-  }
 }
 
 /* Theme switch (checkbox slider) */

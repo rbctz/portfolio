@@ -21,23 +21,17 @@ document.querySelectorAll("nav a").forEach((anchor) => {
     toggleCheckbox.setAttribute("aria-checked", String(theme === "dark"));
   }
 
-  function getSystemPreference() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  }
-
-  // Initialize
+  // Initialize: default to light unless user saved a preference
   try {
     const saved = localStorage.getItem(storageKey);
     if (saved) {
       applyTheme(saved);
     } else {
-      applyTheme(getSystemPreference());
+      applyTheme("light");
     }
   } catch (e) {
-    // If localStorage isn't available, fall back to system preference
-    applyTheme(getSystemPreference());
+    // If localStorage isn't available, default to light
+    applyTheme("light");
   }
 
   // Use the checkbox change event for toggling
@@ -51,20 +45,7 @@ document.querySelectorAll("nav a").forEach((anchor) => {
     applyTheme(newTheme);
   });
 
-  // Keep in sync if user changes OS-level preference while page is open
-  if (window.matchMedia) {
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => {
-        try {
-          const saved = localStorage.getItem(storageKey);
-          if (saved) return; // respect explicit choice
-        } catch (err) {
-          // ignore
-        }
-        applyTheme(e.matches ? "dark" : "light");
-      });
-  }
+  // Removed OS preference syncing — site will always default to light on first load
 })();
 
 // Section show-up animation on scroll
@@ -86,3 +67,37 @@ document.querySelectorAll("nav a").forEach((anchor) => {
     observer.observe(section);
   });
 })();
+
+// Clock
+
+const time = document.getElementById("time");
+const day = document.getElementById("day");
+
+let clock = setInterval(
+	function calcTime() {
+		let date_now = new Date();
+		let hr = date_now.getHours();
+		let min = date_now.getMinutes();
+		let sec = date_now.getSeconds();
+
+		let days = [
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday"
+		];
+
+		day.textContent = days[date_now.getDay()];
+
+		hr = hr < 10 ? "0" + hr : hr;
+		min = min < 10 ? "0" + min : min;
+		sec = sec < 10 ? "0" + sec : sec;
+
+		time.textContent = hr + ":" + min + ":" + sec;
+	},
+
+	1000
+);
